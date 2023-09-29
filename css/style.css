@@ -1,9 +1,10 @@
 :root {
     /* Color Scheme */
     --primary: #23509C;
-    --secondary: #AFC5E8;
+    --secondary: #77a7f0e5;
     --background: #EEECEE;
-    --white: #FEFCFE;
+    --clear: #FEFCFE;
+    --dark: #070707;
 }
 
 /* Global Styling */
@@ -42,7 +43,7 @@ body {
 
 .btn-primary {
     background: var(--primary);
-    color: var(--white);
+    color: var(--clear);
     border: 1px solid var(--primary);
 }
 
@@ -67,17 +68,23 @@ body {
 .side-container {
     display: flex;
     justify-content: space-between;
+    position: relative;
 }
 
 .side-content {
     max-width: 550px;
     width: 100%;
+}
+
+.image-container {
+    height: 540px;
     position: relative;
 }
 
 .image-container img {
-    width: 100%;
     object-fit: cover;
+    width: 100%;
+    height: 100%;
     position: absolute;
 }
 
@@ -88,8 +95,16 @@ body {
     margin-bottom: 2rem;
 }
 
-/** Continua daqui: posicionamento dos botões **/
-.wrapper {
-    position: relative;
-    top: 100%
+.btn-wrapper {
+    display: flex;
+    gap: 30px;
+}
+
+.btn-wrapper .btn {
+    margin: 50px auto;
+    width: 100%;
+    background: var(--clear);
+    font-weight: 900;
+    color: var(--dark);
+    border: none;
 }
