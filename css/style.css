@@ -47,6 +47,12 @@ body {
     border: 1px solid var(--primary);
 }
 
+.btn-primary:hover {
+    background: var(--primary);
+    color: var(--clear);
+    border: 1px solid var(--primary);
+}
+
 .btn-round {
     border-radius: 25px;
 }
