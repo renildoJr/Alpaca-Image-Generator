@@ -1,51 +1,79 @@
 'use strict';
 
+const imageContainer = document.getElementById("image-container");
 const btnsAcessorizeContainer = document.getElementById("btns-acessorize");
 const btnStylesContainer = document.getElementById("btns-style");
-const AlpcaImages = Array.from(document.querySelectorAll(".alpaca-component:not(#alpaca-nose)"));
-const positions = [0, 0, 0, 0, 0, 0, 0, 0];
-
-// AlpcaImages[2].src="images/alpaca/ears/default.png"
-const random = AlpcaImages.find(alpacaComponent => alpacaComponent.dataset.id == 0)
-console.log(random)
-random.src = "images/alpaca/hair/elegant.png" 
-// ATENÇÃO: PROBLEMA => QUANDO ALTERA A O SRC, O A POSICAO DO ELEMENTO HTML FICA EM PRIMEIRO
-// Possível solução, atualizar a lista inteira sempre quando mudar uma única imagem
-
-let btnListRenderedStyle = [];
-let btnStyle = [];
+const positions = [4, 0, 0, 0, 0, 0, 3, 0];
 
 const AlpacaLists = [
-    {id: 7, category: "background", parts: ["blue50", "blue60", "blue70", "darkblue30", "darkblue50", "darkblue70", "green50", "green60", "green70", "grey40", "grey70", "grey80", "red50", "red60", "red70", "yellow50", "yellow60", "yellow70"]},
+    {id: 7, category: "backgrounds", parts: ["blue50", "blue60", "blue70", "darkblue30", "darkblue50", "darkblue70", "green50", "green60", "green70", "grey40", "grey70", "grey80", "red50", "red60", "red70", "yellow50", "yellow60", "yellow70"]},
     {id: 4, category: "neck", parts: ["default", "bend-backward", "bend-forward", "thick"]},
-    {id: 1,category: "ears", parts: ["default", "tilt-backward", "tilt-forward"]},
+    {id: 1, category: "ears", parts: ["default", "tilt-backward", "tilt-forward"]},
     {id: 0, category: "hair", parts: ["default", "bang", "curls", "elegant", "fancy", "quiff", "short"]},
     {id: 2, category: "eyes", parts: ["default", "angry", "naughty", "panda", "smart", "star"]},
     {id: 5, category: "leg", parts: ["default", "bubble-tea", "cookie", "game-console", "tilt-backward", "tilt-forward"]},
     {id: 6, category: "accessories", parts: ["earings", "flower", "glasses", "headphone"]},
     {id: 3, category: "mouth",  parts: ["default", "astonished", "eating", "laugh", "tongue"]},
-]
+];
+
+
+// BUG: TROCANDO A SEQUENCIA DAS IMAGENS APÓS ALTERA-LAS
+function generateAlpacaImage() {
+    imageContainer.innerHTML = "";
+    positions.map((position, index) => {
+        if(index == 7) {
+            imageContainer.innerHTML+=`<img class="alpaca-component" id="alpaca-nose" src="images/alpaca/nose.png" alt="Alpaca Nose">`;
+        }
+        imageContainer.innerHTML+=`
+        <img class="alpaca-component" src="images/alpaca/${AlpacaLists[index].category}/${AlpacaLists[index].parts[position]}.png" alt="Alpaca ${AlpacaLists[index].category}">`;
+    });
+}
 
 // Init
-function renderButtonsInOrder() {
-    // if order => order buttons
+function renderAcessorizeButtons() {
     const AlpacaListSortedById = AlpacaLists.sort((a, b) => a.id - b.id);
     const buttonList = AlpacaListSortedById.map(button => `<button class="btn btn-round" id="${button.id}">${button.category}</button>`);
+    
+    // Refatorar esse trecho em dentro de uma única função
     btnsAcessorizeContainer.innerHTML = buttonList.join("");
 
-    const renderedButtons = btnsAcessorizeContainer.querySelectorAll(".btn")
+    const renderedButtons = Array.from(btnsAcessorizeContainer.querySelectorAll(".btn"));
+    renderedButtons[0].classList.add("btn-primary");
+    ////
 
-    // continuar daqui......
-    renderedButtons.forEach(button => button.addEventListener("click", ()=>{}))
+    renderedButtons.forEach((button, index) => button.addEventListener("click", ()=>{
+        changeButtonsClass("btn-primary", button, renderedButtons);
+        // Tornar o código acima reaproveitável, a função abaixo será extra
+        renderStyleButtons(button.id, index);
+    }));
 }
 
-function changeButtonsClass(currentButtom, buttonList) {
+function renderStyleButtons(CurrentButtonId = 0, currentListIndex = 3) {
+    const buttonList = AlpacaLists[CurrentButtonId].parts.map(button => `<button class="btn btn-round">${button}</button>`);
+    
+    // Refatorar esse trecho em dentro de uma única função
+    btnStylesContainer.innerHTML = buttonList.join("");
 
+    const renderedButtons = Array.from(btnStylesContainer.querySelectorAll(".btn"));
+    renderedButtons[positions[currentListIndex]].classList.add("btn-primary");
+    ////
+
+    renderedButtons.forEach((button, index) => button.addEventListener("click", ()=>{
+        changeButtonsClass("btn-primary", button, renderedButtons);
+        // Tornar o código acima reaproveitável, a função abaixo será extra
+        positions[currentListIndex] = index;
+        generateAlpacaImage();
+    }));
 }
 
-renderButtonsInOrder()
+function changeButtonsClass(ButtonClass = "", currentButton = {}, buttonList = []) {
+    buttonList.map(button => button.classList.remove(ButtonClass));
+    currentButton.classList.add(ButtonClass);
+}
 
-
+generateAlpacaImage();
+renderAcessorizeButtons();
+renderStyleButtons();
 
 
 
