@@ -36,6 +36,10 @@ body {
     transition: .3s;
 }
 
+.btn::first-letter {
+    text-transform: uppercase;
+}
+
 .btn:hover {
     color: var(--primary);
     border:  1px solid var(--primary);
