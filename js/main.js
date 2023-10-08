@@ -17,19 +17,17 @@ const AlpacaLists = [
     {id: 3, category: "mouth",  parts: ["default", "astonished", "eating", "laugh", "tongue"]},
 ];
 
-// Criar funcionalidades para renderizar todas as imagens quando alteradas e outra para alterar somente a solicitada
 function generateAlpacaImage() {
     imageContainer.innerHTML = "";
     positions.map((position, index) => {
         if(index == 7) {
-            imageContainer.innerHTML+=`<img class="alpaca-component" src="images/alpaca/nose.png" alt="Alpaca Nose">`;
+            imageContainer.innerHTML+=`<img id="ignore" class="alpaca-component" src="images/alpaca/nose.png" alt="Alpaca Nose">`;
         }
-        imageContainer.innerHTML+=`
-        <img class="alpaca-component" src="images/alpaca/${AlpacaLists[index].category}/${AlpacaLists[index].parts[position]}.png" alt="Alpaca ${AlpacaLists[index].category}">`;
+        imageContainer.innerHTML+=`<img id="${AlpacaLists[index].id}" class="alpaca-component" src="images/alpaca/${AlpacaLists[index].category}/${AlpacaLists[index].parts[position]}.png" alt="Alpaca ${AlpacaLists[index].category}">`;
     });
+
 }
 
-// Init
 function renderAcessorizeButtons() {
     const buttonList = AlpacaLists.map(button => `<button class="btn btn-round" style="order:${button.id}">${button.category}</button>`);
     
@@ -72,12 +70,11 @@ function changeButtonsClass(ButtonClass = "", currentButton = {}, buttonList = [
 btnRandom.addEventListener("click", randomizePositions);
 
 function randomizePositions() {
-    AlpacaLists.forEach((list, index) =>
-    // continuar daqui 
-        list.parts
-    )
+    AlpacaLists.forEach((Currentlist, index) => positions[index] = Math.floor(Math.random() * Currentlist.parts.length));
+    generateAlpacaImage();
 }
 
+// Init
 generateAlpacaImage();
 renderAcessorizeButtons();
 renderStyleButtons();
