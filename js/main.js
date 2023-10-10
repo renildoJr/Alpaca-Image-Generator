@@ -3,7 +3,8 @@
 const imageContainer = document.getElementById("image-container");
 const btnsAcessorizeContainer = document.getElementById("btns-acessorize");
 const btnStylesContainer = document.getElementById("btns-style");
-const btnRandom = document.getElementById("btn_random");
+const btnRandomOnClick = document.getElementById("btn_random");
+const btnDownloadOnClick = document.getElementById("btn_download");
 const positions = [4, 0, 0, 0, 0, 0, 3, 0];
 
 const AlpacaLists = [
@@ -17,15 +18,18 @@ const AlpacaLists = [
     {id: 3, category: "mouth",  parts: ["default", "astonished", "eating", "laugh", "tongue"]},
 ];
 
+// criar codigo para alterar sequencias 
+
 function generateAlpacaImage() {
     imageContainer.innerHTML = "";
     positions.map((position, index) => {
-        if(index == 7) {
+        if(index == 2) {
             imageContainer.innerHTML+=`<img id="ignore" class="alpaca-component" src="images/alpaca/nose.png" alt="Alpaca Nose">`;
         }
         imageContainer.innerHTML+=`<img id="${AlpacaLists[index].id}" class="alpaca-component" src="images/alpaca/${AlpacaLists[index].category}/${AlpacaLists[index].parts[position]}.png" alt="Alpaca ${AlpacaLists[index].category}">`;
     });
 
+    UpdateDownloadLink();
 }
 
 function renderAcessorizeButtons() {
@@ -67,12 +71,20 @@ function changeButtonsClass(ButtonClass = "", currentButton = {}, buttonList = [
     currentButton.classList.add(ButtonClass);
 }
 
-btnRandom.addEventListener("click", randomizePositions);
-
 function randomizePositions() {
     AlpacaLists.forEach((Currentlist, index) => positions[index] = Math.floor(Math.random() * Currentlist.parts.length));
     generateAlpacaImage();
 }
+
+// Html2Canvas
+function UpdateDownloadLink () {
+    html2canvas(imageContainer, {width: 350, height: 350}).then(function(canvas) {
+        btnDownloadOnClick.href = canvas.toDataURL();
+        btnDownloadOnClick.download = "alpaca.jpg";
+    });
+}
+
+btnRandomOnClick.addEventListener("click", randomizePositions);
 
 // Init
 generateAlpacaImage();
